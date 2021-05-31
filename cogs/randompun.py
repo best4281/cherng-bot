@@ -1,17 +1,17 @@
 import random
 import io
+import discord
 import numpy as np
 from PIL import Image, ImageDraw, ImageOps
 from discord.ext import commands
-from discord import File
 from configs import *
 
 
 async def insert_profile(profile, pos):
-    image = Image.open('5b5zcj.png')
-    alphaChannelImage = ImageOps.expand(profile, border=(5,5,5,5), fill='black')
-    profile.convert('RGBA')
-    alphaChannelImage = profile.getchannel( 'A' )
+    image = Image.open("/pictures/pun_bonk.png")
+    alphaChannelImage = ImageOps.expand(profile, border=(5,5,5,5), fill="black")
+    profile.convert("RGBA")
+    alphaChannelImage = profile.getchannel('A')
     image.paste(profile, (int(image.size[0] - pos[0]), int(image.size[1] - pos[1])), mask=alphaChannelImage)
     return image
 
@@ -122,6 +122,10 @@ class randomCog(commands.Cog, command_attrs = { "hidden" : True}):
             for i in range(cnt):
                 choice = str(random.choice(pun))
                 if len(selected + choice) >= 2000:
+                    if ctx.author.id == 116019639053451265:
+                        selected = f"Wait what??? Did <@116019639053451265> just tried to bonk himself ?"
+                        bonk = discord.file("/pictures/pun_bonk_himself.png")
+                        break
                     avatarAsset = ctx.author.avatar_url_as(format='png', size=1024)
                     avatarBuffer = io.BytesIO()
                     await avatarAsset.save(avatarBuffer)
@@ -140,7 +144,7 @@ class randomCog(commands.Cog, command_attrs = { "hidden" : True}):
                     buffer = io.BytesIO()
                     gotBonked.save(buffer, format='png')
                     buffer.seek(0)
-                    bonk = File(buffer, f"{ctx.author.name}_got_bonked.png")
+                    bonk = discord.File(buffer, f"{ctx.author.name}_got_bonked.png")
                     break
                 selected = selected + choice
         await ctx.send(selected, file = bonk)
