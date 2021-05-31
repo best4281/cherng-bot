@@ -53,8 +53,6 @@ async def bonk_distort(grid, strength, x_step, y_step):
     new_grid[2][0] = [int(new_grid[2][0][0] - 0.6*x_move), int(new_grid[2][0][1] - 0.6*y_move)]
     new_grid[2][1] = [int(new_grid[2][1][0] - 0.8*x_move), int(new_grid[2][1][1] - 0.8*y_move)]
     new_grid[1][2] = [int(new_grid[1][2][0] - 0.8*x_move), int(new_grid[1][2][1] - 0.8*y_move)]
-    print(new_grid[0][0])
-    print(new_grid[1][1])
     return new_grid
 
 async def quad_as_rect(quad):
