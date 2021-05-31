@@ -23,8 +23,11 @@ async def user_search(appname:str, appid:int, members:list):
     except Exception as e:
         print(f"steamCog: {e}")
     ownedMembers = []
-    async for member in userData:
-        ownedMembers.append(member["_id"])
+    try:
+        async for member in userData:
+            ownedMembers.append(member["_id"])
+    except Exception as e:
+        print(f"Steamcog: {e}")
     if not ownedMembers:
         return f"Sadly, nobody registered with me here has **{appname}** in their steam library.", None
     mentions = ' '.join(f"<@{user}>" for user in members)
