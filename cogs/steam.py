@@ -30,7 +30,7 @@ async def user_search(appname:str, appid:int, members:list):
         print(f"Steamcog: {e}")
     if not ownedMembers:
         return f"Sadly, nobody registered with me here has **{appname}** in their steam library.", None
-    mentions = ' '.join(f"<@{user}>" for user in members)
+    mentions = ' '.join(f"<@{user}>" for user in ownedMembers)
     embed = discord.Embed(title = f"Let's come together and play **{appname}**.", description = f"steam://run/{appid}", color = 0X6ef9f5)
     return mentions, embed
 
