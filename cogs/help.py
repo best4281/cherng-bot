@@ -46,14 +46,14 @@ class helpCog(commands.Cog, name = "Help"):
                     embedHelp = discord.Embed(
                         title = f"{self.bot.user.name} Commands listed by category:",
                         description = f"Use `{prefix}help [category/command]` for more detail\nUse `{prefix}help [page_number]` for going to another page\n⠀",
-                        color = botColor,
+                        color = botColor["Spring Bud"],
                         timestamp = datetime.datetime.utcnow()
                         )
                 else:
                     embedHelp = discord.Embed(
                         title = f"{self.bot.user.name} Commands listed by category:",
                         description = f"Use `{prefix}help [category/command]` for more detail\n⠀",
-                        color = botColor,
+                        color = botColor["Spring Bud"],
                         timestamp = datetime.datetime.utcnow()
                         )
                 embedHelp.set_thumbnail(url = self.bot.user.avatar_url)
@@ -93,7 +93,7 @@ class helpCog(commands.Cog, name = "Help"):
 
                 if detaillow in checkCommands:
                     command = commands[checkCommands[detaillow]]
-                    embedHelp = discord.Embed(title = f"Command: {command.name}", description = command.help + "\n⠀", color = botColor)
+                    embedHelp = discord.Embed(title = f"Command: {command.name}", description = command.help + "\n⠀", color = botColor["Lime Green"])
                     embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
                     embedHelp.set_footer(text = "/ - Or , <> - Required & [] - Optional")
                     usage = command.usage if command.usage is not None else ""
@@ -105,7 +105,7 @@ class helpCog(commands.Cog, name = "Help"):
                 elif detaillow in checkCogs:
                     index = checkCogs.index(detaillow)
                     currentCog = self.bot.get_cog(cogs[index])
-                    embedHelp = discord.Embed(title = f"Category: {cogs[index]}", description = currentCog.description + "\n⠀" , color = botColor)
+                    embedHelp = discord.Embed(title = f"Category: {cogs[index]}", description = currentCog.description + "\n⠀" , color = botColor["Yellow Green"])
                     embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
                     embedHelp.set_footer(text = "/ - Or , <> - Required & [] - Optional")
                     for command in currentCog.walk_commands():

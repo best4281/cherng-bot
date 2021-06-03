@@ -31,7 +31,7 @@ async def user_search(appname:str, appid:int, members:list):
     if not ownedMembers:
         return f"Sadly, nobody registered with me here has **{appname}** in their steam library.", None
     mentions = ' '.join(f"<@{user}>" for user in ownedMembers)
-    embed = discord.Embed(title = f"Let's come together and play **{appname}**.", description = f"steam://run/{appid}", color = 0X6ef9f5)
+    embed = discord.Embed(title = f"Let's come together and play **{appname}**.", description = f"steam://run/{appid}", color = botColor["Sky Blue"])
     return mentions, embed
 
 async def google_search(query, members, **kwargs):

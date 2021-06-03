@@ -11,10 +11,17 @@ def get_prefix(ctx):
     except:
         return defaultPrefix
 
+botColor = {
+    "Spring Bud": 0xafff00,
+    "Yellow Green": 0x95c728,
+    "Lime Green": 0x4cc936,
+    "Sky Blue": 0X1be7ff,
+    "Orange": 0xf08700
+}
+
 prefixFileName = "prefixes.json"
 cogsDir = "cogs"
 defaultPrefix = '!'
-botColor = 0xafff00
 CSEid = "49fac5d937f302021"
 
 load_dotenv()

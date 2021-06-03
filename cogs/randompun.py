@@ -122,7 +122,7 @@ class randomCog(commands.Cog, command_attrs = { "hidden" : True}):
                 if len(selected + choice) >= 2000:
                     if ctx.author.id == 116019639053451265:
                         selected = "Wait what??? Did <@116019639053451265> just tried to bonk himself ?"
-                        bonk = discord.file("./pictures/pun_bonk_himself.png")
+                        bonk = discord.File("./pictures/pun_bonk_himself.png")
                         break
                     avatarAsset = ctx.author.avatar_url_as(format='png', size=1024)
                     avatarBuffer = io.BytesIO()
