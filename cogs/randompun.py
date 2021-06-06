@@ -88,7 +88,7 @@ async def warp_profile(profile, strength):
     profile = profile.transform(profile.size, Image.MESH, mesh)
     return profile, x_step, y_step
 
-class randomCog(commands.Cog, command_attrs = {"hidden" : True}):
+class RandomCog(commands.Cog, command_attrs = {"hidden" : True}):
 
     def __init__(self,bot):
         self.bot = bot
@@ -145,4 +145,4 @@ class randomCog(commands.Cog, command_attrs = {"hidden" : True}):
         await ctx.send(selected, file = bonk)
 
 def setup(bot):
-    bot.add_cog(randomCog(bot))
+    bot.add_cog(RandomCog(bot))

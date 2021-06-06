@@ -15,7 +15,7 @@ async def get_user_from_mention(ctx, filtered_args:tuple = None) -> list:
             pass
     return userList
 
-class textCommandsCog(commands.Cog, name = "Text", description = "Commands for managing text channel."):
+class TextCog(commands.Cog, name = "Text", description = "Commands for managing text channel."):
 
     def __init__(self, bot):
         self.bot = bot
@@ -69,4 +69,4 @@ class textCommandsCog(commands.Cog, name = "Text", description = "Commands for m
             await ctx.send("If you tried to use `clear` command without a number, it will __not__ work. Please always specify the number of messages to clear.")
 
 def setup(bot):
-    bot.add_cog(textCommandsCog(bot))
+    bot.add_cog(TextCog(bot))

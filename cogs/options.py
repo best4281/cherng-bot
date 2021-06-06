@@ -5,7 +5,7 @@ from configs import *
 
 prefixFile = "./" + prefixFileName
 
-class optionsCog(commands.Cog, name = "Settings", description = "Commands for changing settings of this bot in your server."):
+class OptionsCog(commands.Cog, name = "Settings", description = "Commands for changing settings of this bot in your server."):
 
     def __init__(self,bot):
         self.bot = bot
@@ -49,4 +49,4 @@ class optionsCog(commands.Cog, name = "Settings", description = "Commands for ch
             await ctx.send(f"Prefix for this bot in **{ctx.guild.name}** was changed to `{newPrefix}`")
 
 def setup(bot):
-    bot.add_cog(optionsCog(bot))
+    bot.add_cog(OptionsCog(bot))

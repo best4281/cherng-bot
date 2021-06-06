@@ -38,7 +38,7 @@ async def fetch_invite(ctx, app):
                 return False
 
 
-class secretCog(commands.Cog, command_attrs = { "hidden" : True}):
+class SecretActivitiesCog(commands.Cog, command_attrs = { "hidden" : True}):
 
     def __init__(self, bot):
         self.bot = bot
@@ -76,4 +76,4 @@ class secretCog(commands.Cog, command_attrs = { "hidden" : True}):
         await message.pin()
 
 def setup(bot):
-    bot.add_cog(secretCog(bot))
+    bot.add_cog(SecretActivitiesCog(bot))

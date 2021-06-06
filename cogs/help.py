@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from configs import *
 
-class helpCog(commands.Cog, name = "Help"):
+class HelpCog(commands.Cog, name = "Help"):
 
     def __init__(self, bot):
         self.bot = bot
@@ -126,4 +126,4 @@ class helpCog(commands.Cog, name = "Help"):
         await ctx.send(content, embed = embedHelp)
 
 def setup(bot):
-    bot.add_cog(helpCog(bot))
+    bot.add_cog(HelpCog(bot))

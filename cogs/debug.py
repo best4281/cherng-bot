@@ -2,7 +2,7 @@ import os
 from discord.ext import commands
 from configs import *
 
-class debugCog(commands.Cog, command_attrs = {"hidden" : True}):
+class DebugCog(commands.Cog, command_attrs = {"hidden" : True}):
 
     def __init__(self,bot):
         self.bot = bot
@@ -67,4 +67,4 @@ class debugCog(commands.Cog, command_attrs = {"hidden" : True}):
             await ctx.send('**`SUCCESS`**')
 
 def setup(bot):
-    bot.add_cog(debugCog(bot))
+    bot.add_cog(DebugCog(bot))

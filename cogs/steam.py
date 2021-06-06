@@ -53,7 +53,7 @@ async def google_search(query, members, **kwargs):
     return f"**{query}** does not match any app name or id on Steam, please try again with different keyword.", None
 
 
-class steamInteractionCog(commands.Cog, name = "Steam", description = "Commands for interacting with Steam"):
+class SteamInteractionCog(commands.Cog, name = "Steam", description = "Commands for interacting with Steam"):
     
     def __init__(self,bot):
         self.bot = bot
@@ -175,4 +175,4 @@ class steamInteractionCog(commands.Cog, name = "Steam", description = "Commands 
         print(f"{now}: {ctx.author.name} search for {keyword}, and it took {time.time() - start_time} seconds to finish.")
 
 def setup(bot):
-    bot.add_cog(steamInteractionCog(bot))
+    bot.add_cog(SteamInteractionCog(bot))
