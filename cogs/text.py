@@ -2,18 +2,6 @@ import discord
 from discord.ext import commands
 from configs import *
 
-async def get_user_from_mention(ctx, filtered_args:tuple = None) -> list:
-    userList = []
-    for arg in filtered_args:
-        try:
-            arg = int(arg.strip('<@!>'))
-            try:
-                userList.append(await ctx.guild.fetch_member(arg))
-            except:
-                pass
-        except:
-            pass
-    return userList
 
 class TextCog(commands.Cog, name = "Text", description = "Commands for managing text channel."):
 
@@ -44,11 +32,9 @@ class TextCog(commands.Cog, name = "Text", description = "Commands for managing 
         if not ctx.message.mentions and '-i' in args or '--ignore' in args:
             check_func = lambda x: True
         elif ctx.message.mentions  and ctx.guild and '-i' in args or '--ignore' in args:
-            tagged = await get_user_from_mention(ctx, args)
-            check_func = lambda x: x.author in tagged
+            check_func = lambda x: x.author in ctx.message.mentions
         elif ctx.message.mentions and ctx.guild:
-            tagged = await get_user_from_mention(ctx, args)
-            check_func = lambda x: x.author in tagged and not x.pinned
+            check_func = lambda x: x.author in ctx.message.mentions and not x.pinned
         else:
             check_func = lambda x: not x.pinned
 
