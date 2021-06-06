@@ -7,12 +7,10 @@ from discord.ext import commands
 from configs import *
 
 
-async def insert_profile(profile, pos):
+async def insert_profile(profile, pos:list):
+    alphaChannel = profile.getchannel('A')
     image = Image.open("./pictures/pun_bonk.png")
-    alphaChannelImage = ImageOps.expand(profile, border=(5,5,5,5), fill="black")
-    profile.convert("RGBA")
-    alphaChannelImage = profile.getchannel('A')
-    image.paste(profile, (int(image.size[0] - pos[0]), int(image.size[1] - pos[1])), mask=alphaChannelImage)
+    image.paste(profile, (int(image.size[0] - pos[0]), int(image.size[1] - pos[1])), mask=alphaChannel)
     return image
 
 async def make_profile_round(userAvatar):
@@ -38,7 +36,6 @@ async def griddify(size, x_cut, y_cut):
             vertexMatrix[-1].append([int(x), int(y)])
             x += x_step
         y += y_step
-    #print(np.array(vertexMatrix))
     return np.array(vertexMatrix), x_step, y_step
 
 async def bonk_distort(grid, strength, x_step, y_step):
@@ -91,7 +88,7 @@ async def warp_profile(profile, strength):
     profile = profile.transform(profile.size, Image.MESH, mesh)
     return profile, x_step, y_step
 
-class randomCog(commands.Cog, command_attrs = { "hidden" : True}):
+class randomCog(commands.Cog, command_attrs = {"hidden" : True}):
 
     def __init__(self,bot):
         self.bot = bot
@@ -129,20 +126,20 @@ class randomCog(commands.Cog, command_attrs = { "hidden" : True}):
                     await avatarAsset.save(avatarBuffer)
                     avatarBuffer.seek(0)
                     userAvatar = Image.open(avatarBuffer)
-                    profileImg = await make_profile_round(userAvatar)
+                    profileImg= await make_profile_round(userAvatar)
                     strength = random.random()
-                    if strength > 0.8:
-                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, so he thinks you are too horny and hit you with a **very effective** bonk."
-                    elif strength < 0.2:
-                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, so he thinks you are too horny but his bonk was *not very effective*."
-                    else:
-                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, It's too many and he thinks you should go to horny jail."
                     profileImg, x_step, y_step = await warp_profile(profileImg, strength)
-                    gotBonked = await insert_profile(profileImg, [232 + strength*strength*x_step, 253 + strength*strength*y_step])
+                    gotBonked = await insert_profile(profileImg, [227 + strength*x_step, 251 + strength*y_step])
                     buffer = io.BytesIO()
                     gotBonked.save(buffer, format='png')
                     buffer.seek(0)
                     bonk = discord.File(buffer, f"{ctx.author.name}_got_bonked.png")
+                    if strength > 0.8:
+                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, so he thinks you are too horny and hit you with a **very effective** bonk."
+                    elif strength < 0.2:
+                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, so he thinks you should go to horny jail but his bonk was *not very effective*."
+                    else:
+                        selected = f"{ctx.author.mention} You asked for {num} ToodPun, It's too many and he thinks you should go to horny jail."
                     break
                 selected = selected + choice
         await ctx.send(selected, file = bonk)
