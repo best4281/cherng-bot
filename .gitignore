@@ -107,7 +107,6 @@ celerybeat.pid
 
 # Environments
 .swp
-.env
 .env/
 .venv/
 .vscode/
