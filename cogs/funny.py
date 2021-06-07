@@ -8,9 +8,9 @@ from discord.ext import commands
 from configs import *
 
 
-async def insert_profile(profile, base, pos:list, add=False):
+async def insert_profile(profile, base, pos:list):
     alphaChannel = profile.getchannel('A')
-    if not add and type(base) is str:
+    if type(base) is str:
         image = Image.open(base)
     else:
         image = base
@@ -111,7 +111,7 @@ async def create_bonk(ctx, bonker, bonked, strength, **kwargs):
         bonkedImg = await get_profile_pic(bonked)
         bonkedImg, x_step, y_step = await warp_profile(bonkedImg, strength)
         gotBonked = await insert_profile(bonkedImg, "./pictures/blank_bonk.png", [227 + strength*x_step, 251 + strength*y_step])
-        gotBonked = await insert_profile(bonkerImg.rotate(-30), gotBonked, [575, 531], add=True)
+        gotBonked = await insert_profile(bonkerImg.rotate(-30), gotBonked, [575, 531])
     else:
         bonkerName = "Pun"
         bonkedImg = await get_profile_pic(bonked)
@@ -155,11 +155,11 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         
         if self.bot.user in target:
                 bonk = await create_bonk(ctx, self.bot.user, ctx.author, 0.99, spoiler=True)
-                await ctx.send("Who do you think you are? Parry **this** you filthy casual!", file = bonk)
+                await ctx.send(f"{ctx.author.mention} Who do you think you are? Parry **this** you filthy casual!", file = bonk)
                 return
 
         if ctx.author in target and "toodpun" not in kwargs:
-                await ctx.send("No need to bonk yourself, trust me. You should not hurt yourself while hurting other people.")
+                await ctx.send(f"{ctx.author.mention} No need to bonk yourself, trust me. You should not hurt yourself while hurting other people.")
                 return
 
         if "message" not in kwargs:
@@ -173,7 +173,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             elif strength < 0.2:
                 message = f"{ctx.author.mention} tried to bonk {next(iter(target)).mention}, but {next(iter(target)).mention} almost dodge it so your bonk was *not very effective*."
             else:
-                message = f"{ctx.author.mention} bonked {next(iter(target)).mention}, nothing too fancy happened."
+                message = f"{ctx.author.mention} bonked {next(iter(target)).mention}"
         else:
             message = kwargs["message"]
         
@@ -186,7 +186,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                     bonk.append(await create_bonk(ctx, None, ctx.author, strength))
                 else:
                     bonk.append(await create_bonk(ctx, ctx.author, person, strength))
-        print(bonk)
+        #print(bonk)
         await ctx.send(message, files=bonk)
         return
 
