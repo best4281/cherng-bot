@@ -52,6 +52,9 @@ async def on_message(message):
     if not message.guild:
         await message.author.send("I was not made ready to serve you in private chat, maybe one day I will.")
         return
+    if message.content.replace('!','',1) == bot.user.mention:
+        guild_prefix = get_prefix(message)
+        await message.reply(f"**Are you lost or something?**\nMy current prefix in this server is `{guild_prefix}`\nRemember it, or change it by using `{guild_prefix}setting prefix <new_prefix>`")
     await bot.process_commands(message)
 
 if __name__ == "__main__":
