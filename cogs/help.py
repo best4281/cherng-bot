@@ -9,7 +9,7 @@ class HelpCog(commands.Cog, name = "Help"):
 
     def __init__(self, bot):
         self.bot = bot
-        self.maxLength = 1
+        self.maxLength = 5
 
     @commands.command(
         name = "help",
@@ -70,14 +70,14 @@ class HelpCog(commands.Cog, name = "Help"):
                 for currentPage in range(totalPages):
                     helpPage = embedHelp.copy()
                     cogsInPage = []
-                    if currentPage == 0:
+                    if currentPage == 0 and totalPages != 1:
                         helpPage.description = (
                             f"Use `{prefix}help [category/command]` to get more detail\n"
                             f"Use `{prefix}help [page_number]` to go to specific page\n"
                             "Press :arrow_forward: below to navigate to next page\n"
                             "Press :x: below to delete this help message\n⠀"
                         )
-                    elif currentPage == totalPages - 1:
+                    elif currentPage == totalPages - 1 and totalPages != 1:
                         helpPage.description = (
                             f"Use `{prefix}help [category/command]` to get more detail\n"
                             f"Use `{prefix}help [page_number]` to go to specific page\n"
