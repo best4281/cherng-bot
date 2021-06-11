@@ -25,25 +25,22 @@ class HelpCog(commands.Cog, name = "Help"):
     )
     @commands.max_concurrency(2, commands.BucketType.channel)
     async def help_command(self, ctx, *details):
+        prefix = get_prefix(ctx)
+        detail = ' '.join(details)
+        cogs = [c for c in self.bot.cogs.keys() if 'cog' not in c.lower()]
+        totalPages = math.ceil(len(cogs) / self.maxLength)
+        content = ''
 
-        async with ctx.typing():
+        if not details:
+            detail = "1"
 
-            prefix = get_prefix(ctx)
-            detail = ' '.join(details)
-            cogs = [c for c in self.bot.cogs.keys() if 'cog' not in c.lower()]
-            totalPages = math.ceil(len(cogs) / self.maxLength)
-            content = ''
+        if detail.isdecimal():
+            page = int(detail)
+            if page > totalPages or page < 1:
+                await ctx.send(f"There is no page **{detail}**. There are only **{totalPages}** in the help section.")
+                return
 
-            if not details:
-                detail = "1"
-
-            if detail.isdecimal():
-                page = int(detail)
-
-                if page > totalPages or page < 1:
-                    await ctx.send(f"There is no page **{detail}**. There are only **{totalPages}** in the help section.")
-                    return
-
+            async with ctx.typing():
                 if totalPages > 1:
                     embedHelp = discord.Embed(
                         title = f"{self.bot.user.name} Commands listed by category:",
@@ -107,7 +104,8 @@ class HelpCog(commands.Cog, name = "Help"):
                     helpPage.set_footer(text = f"Page {currentPage + 1} of {totalPages}")
                     helpPages.append(helpPage)
                 embedHelp = helpPages[page-1]
-            else:
+        else:
+            async with ctx.typing():
                 detaillow = detail.lower()
                 checkCogs = [cog.lower() for cog in cogs]
                 commands = {cmd.name:cmd for cmd in self.bot.walk_commands() if 'cog' not in cmd.cog_name.lower()}
@@ -188,7 +186,7 @@ class HelpCog(commands.Cog, name = "Help"):
 
             while True:
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=20.0, check=react_check)\
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=20.0, check=react_check)
 
                     if reaction.emoji == "\N{Black Right-Pointing Triangle}":
                         page += 1
