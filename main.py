@@ -15,8 +15,6 @@ logger.addHandler(handler)
 intents = discord.Intents.all()
 
 def retrieve_prefix(bot, ctx):
-    with open("./" + prefixFileName, 'r') as f:
-        prefixes = json.load(f)
     try:
         return prefixes[str(ctx.guild.id)]
     except:
@@ -36,16 +34,6 @@ async def on_ready():
     print(f"Logged on as {bot.user.name} {bot.user.id}")
     for guild in bot.guilds:
         print(f"Belong to guild: {guild.name} {guild.id}")
-
-@bot.event
-async def on_guild_join(guild):
-    await guild.system_channel.send(
-        (
-        f"Hello people! I am **{bot.user.name}**\n"
-        f"You can use my commands with `{defaultPrefix}` as a prefix.\n"
-        f"For more info, send `{defaultPrefix}help`"
-        )
-    )
 
 @bot.event
 async def on_message(message):

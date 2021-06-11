@@ -3,25 +3,26 @@ import json
 import motor.motor_asyncio as motor
 from dotenv import load_dotenv
 
+
 def get_prefix(ctx):
-    with open(prefixFileName, 'r') as f:
-        prefixes = json.load(f)
     try:
         return prefixes[str(ctx.guild.id)]
     except:
         return defaultPrefix
 
+
 botColor = {
-    "Spring Bud": 0xafff00,
-    "Yellow Green": 0x95c728,
-    "Lime Green": 0x4cc936,
-    "Sky Blue": 0X1be7ff,
-    "Orange": 0xf08700
+    "Spring Bud": 0xAFFF00,
+    "Yellow Green": 0x95C728,
+    "Lime Green": 0x4CC936,
+    "Sky Blue": 0x1BE7FF,
+    "Orange": 0xF08700,
 }
 
-prefixFileName = "prefixes.json"
+prefixFile = "./prefixes.json"
+prefixes = json.load(open(prefixFile, "r"))
 cogsDir = "cogs"
-defaultPrefix = '!'
+defaultPrefix = "!"
 CSEid = "49fac5d937f302021"
 
 load_dotenv()
