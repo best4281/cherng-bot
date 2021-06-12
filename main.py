@@ -41,9 +41,16 @@ async def on_message(message):
         await message.author.send("I was not made ready to serve you in private chat, maybe one day I will.")
         return
     if message.content.replace('!','',1) == bot.user.mention:
-        guild_prefix = get_prefix(message)
+        guild_prefix = retrieve_prefix(bot, message)
         await message.reply(f"**Are you lost or something?**\nMy current prefix in this server is `{guild_prefix}`\nRemember it, or change it by using `{guild_prefix}setting prefix <new_prefix>`")
     await bot.process_commands(message)
+
+@bot.check_once
+async def check_commands(ctx):
+    if ctx.channel.id in blacklistedTextChannel[ctx.guild.id] and f"{ctx.prefix}{ctx.invoked_with} blacklist" not in ctx.message.content:
+        await ctx.send(f"This channel was blacklisted, you can remove this text channel from blacklist using **{ctx.prefix}setting blacklist {ctx.channel.mention}**", delete_after=10.0)
+        return False
+    return True
 
 if __name__ == "__main__":
     for extension in [f.replace('.py', '') for f in os.listdir(cogsDir) if os.path.isfile(os.path.join(cogsDir, f)) and not f.startswith('_')]:

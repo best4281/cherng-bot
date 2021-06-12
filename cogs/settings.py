@@ -48,6 +48,8 @@ class SettingsCog(
     async def setting(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.invoke(self.bot.get_command("help"), "setting")
+            if ctx.subcommand_passed is not None:
+                await ctx.send(f"`{ctx.subcommand_passed}` is not a valid option for `{ctx.prefix}{ctx.invoked_with}`")
 
     @setting.command(
         name="prefix",
@@ -56,6 +58,7 @@ class SettingsCog(
         usage="<new_prefix>",
         description=(
             "`new_prefix:` new prefix to use in this server\n"
+            "If the new prefix include *space*, please put it in quotation marks (*Example:* `\"pls \"`)\n\n"
             "(default prefix for this bot is `!`)\n"
             "**Require __administrator__ permission.**\n⠀"
         ),
@@ -63,16 +66,13 @@ class SettingsCog(
     @commands.has_guild_permissions(manage_messages=True, manage_channels=True)
     async def prefix(self, ctx, newPrefix=None):
         if newPrefix == None:
-            prefix = get_prefix(ctx)
-            await ctx.send(f"Current prefix for this server is `{prefix}`")
             await ctx.invoke(self.bot.get_command("help"), "prefix")
+            await ctx.send(f"Current prefix for this server is `{ctx.prefix}`")
         else:
             async with ctx.typing():
                 prefixes[str(ctx.guild.id)] = newPrefix
                 json.dump(prefixes, open(prefixFile, "w"), indent=4)
-            await ctx.send(
-                f"Prefix for this bot in **{ctx.guild.name}** was changed to `{newPrefix}`"
-            )
+            await ctx.send(f"Prefix for {self.bot.user.mention} in this server was changed to `{newPrefix}`")
 
     @setting.command(
         name="toggle",
@@ -103,13 +103,29 @@ class SettingsCog(
         ),
     )
     @commands.has_guild_permissions(manage_channels=True)
-    async def blacklist(self, ctx, *mention_channel):
-        pass
+    async def blacklist(self, ctx, mention_channels: commands.Greedy[discord.TextChannel] = False):
+        if not mention_channels:
+            await ctx.invoke(self.bot.get_command("help"), "blacklist")
+            return
+        thisGuildBlacklist = blacklistedTextChannel[ctx.guild.id]
+        result = ''
+        for channel in mention_channels:
+            if channel.id not in thisGuildBlacklist:
+                thisGuildBlacklist.append(channel.id)
+                result += f"{channel.mention} was **added** to the blacklist.\n"
+            else:
+                thisGuildBlacklist.remove(channel.id)
+                result += f"{channel.mention} was **removed** from the blacklist.\n"
+        savedBlacklist = await serverSettingsCollection.update_one({"_id": ctx.guild.id}, {"$set":{"blacklisted": thisGuildBlacklist}})
+        if savedBlacklist.matched_count != 0:
+            await ctx.send(result)
+        else:
+            await ctx.send("Umm, uhhhh... I'm dumb.")
 
-    # @prefix.error
-    # @setting.error
-    # async def prefix_error(cog, ctx, error):
-    #    await ctx.send(f"**{cog}**: {error}")
+    @prefix.error
+    @setting.error
+    async def setting_error(cog, ctx, error):
+        await ctx.send(f"{error}")
 
 
 def setup(bot):
