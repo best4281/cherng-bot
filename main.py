@@ -47,10 +47,13 @@ async def on_message(message):
 
 @bot.check_once
 async def check_commands(ctx):
-    if ctx.channel.id in blacklistedTextChannel[ctx.guild.id] and f"{ctx.prefix}{ctx.invoked_with} blacklist" not in ctx.message.content:
-        await ctx.send(f"This channel was blacklisted, you can remove this text channel from blacklist using **{ctx.prefix}setting blacklist {ctx.channel.mention}**", delete_after=10.0)
-        return False
-    return True
+    try:
+        if ctx.channel.id in blacklistedTextChannel[ctx.guild.id] and f"{ctx.prefix}{ctx.invoked_with} blacklist" not in ctx.message.content:
+            await ctx.send(f"This channel was blacklisted, you can remove this text channel from blacklist using **{ctx.prefix}setting blacklist {ctx.channel.mention}**", delete_after=10.0)
+            return False
+        return True
+    except:
+        return True
 
 if __name__ == "__main__":
     for extension in [f.replace('.py', '') for f in os.listdir(cogsDir) if os.path.isfile(os.path.join(cogsDir, f)) and not f.startswith('_')]:

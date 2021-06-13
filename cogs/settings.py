@@ -1,5 +1,6 @@
 import discord
 import json
+from datetime import datetime
 from discord.ext import commands
 from configs import *
 
@@ -16,6 +17,18 @@ class SettingsCog(
     async def on_guild_join(self, guild):
         prefixes[str(guild.id)] = defaultPrefix
         json.dump(prefixes, open(prefixFile, "w"), indent=4)
+        setup = await serverSettingsCollection.insert_one({
+                "_id": guild.id,
+                "name": guild.name,
+                "disabled_commands": [],
+                "blacklisted": []
+            }
+        )
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if setup.acknowledged:
+            print(f"{now}: {guild.name} database was initiated.")
+        else:
+            print(f"{now}: Error: {guild.name} database cannot be initiated, but continue anyway.")
         introductionMessage = (
             f"Hello good people! I am **{self.bot.user.name}**\n"
             f"You can use my commands with `{defaultPrefix}` as a prefix.\n"
@@ -33,6 +46,12 @@ class SettingsCog(
     async def on_guild_remove(self, guild):
         prefixes.pop(str(guild.id))
         json.dump(prefixes, open(prefixFile, "w"), indent=4)
+        deleted = await serverSettingsCollection.delete_one({"_id": guild.id})
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if deleted.acknowledged:
+            print(f"{now}: {guild.name} database was deleted.")
+        else:
+            print(f"{now}: Error: {guild.name} database cannot be deleted, but continue anyway.")
 
     @commands.group(
         name="setting",
