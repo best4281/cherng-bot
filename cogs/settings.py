@@ -12,6 +12,23 @@ class SettingsCog(
 ):
     def __init__(self, bot):
         self.bot = bot
+        self.always_on_cmd = {"setting", "help"}
+        try:
+            for cmd in self.always_on_cmd.copy():
+                currentcmd = self.bot.get_command(cmd)
+                self.always_on_cmd.add(currentcmd.name)
+                for alias in currentcmd.aliases:
+                    self.always_on_cmd.add(alias)
+        except:
+            pass
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        for cmd in self.always_on_cmd.copy():
+            currentcmd = self.bot.get_command(cmd)
+            self.always_on_cmd.add(currentcmd.name)
+            for alias in currentcmd.aliases:
+                self.always_on_cmd.add(alias)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -104,12 +121,36 @@ class SettingsCog(
         ),
     )
     @commands.has_guild_permissions(administrator=True)
-    async def toggle(self, ctx, targetcmd: str):
-        if "setting" in targetcmd.lower() or "settings" in targetcmd.lower():
-            await ctx.send(
-                "How are you gonna turn **settings section** back on if you disable it?"
-            )
+    async def toggle(self, ctx, *target_commands):
+        if not target_commands:
+            await ctx.invoke(self.bot.get_command("help"), "toggle")
             return
+        disabledCommandsHere = disabledCommandsDict[ctx.guild.id]
+        result = ''
+        target_commands = set(target_commands)
+        for target_cmd in target_commands:
+            cmd_low = target_cmd.lower()
+            if cmd_low in self.always_on_cmd:
+                result += f"`{ctx.prefix}setting` and `{ctx.prefix}help` commands are not allowed to be disabled.\n"
+            else:
+                
+                this_cmd = self.bot.get_command(cmd_low)
+                if this_cmd is None:
+                    result += f"`{cmd_low}` is not a valid name for a command.\n"
+                    continue
+                this_cmd = this_cmd.name
+                if this_cmd not in disabledCommandsHere:
+                    disabledCommandsHere.append(this_cmd)
+                    result += f"command `{this_cmd}` was **disabled** successfully.\n"
+                else:
+                    disabledCommandsHere.remove(this_cmd)
+                    result += f"command `{this_cmd}` is now **enabled**.\n"
+        savedDisable = await serverSettingsCollection.update_one({"_id": ctx.guild.id}, {"$set":{"disabled_commands": disabledCommandsHere}})
+        if savedDisable.matched_count != 0:
+            await ctx.send(result)
+        else:
+            await ctx.send("Umm, uhhhh... I'm dumb.")
+        return
 
     @setting.command(
         name="blacklist",
@@ -141,9 +182,13 @@ class SettingsCog(
         else:
             await ctx.send("Umm, uhhhh... I'm dumb.")
 
+    @toggle.error
+    @blacklist.error
     @prefix.error
     @setting.error
     async def setting_error(cog, ctx, error):
+        if isinstance(error, commands.errors.CheckFailure):
+            return
         await ctx.send(f"{error}")
 
 

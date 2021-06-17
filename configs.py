@@ -36,14 +36,18 @@ cluster = motor.AsyncIOMotorClient(mongoConnectionURL)
 serverSettingsCollection = cluster["server"]["settings"]
 
 async def make_blackList(col):
-    blacklisted = col.find(projection={"_id": True, "blacklisted": True})
+    guilds= col.find(projection={"_id": True, "blacklisted": True, "disabled_commands": True})
     blacklistedTextChannel = {}
-    async for guild in blacklisted:
-        blacklistedTextChannel[int(guild["_id"])] = [int(channel) for channel in guild["blacklisted"]]
-    return blacklistedTextChannel
+    disabledCommandsDict = {}
+    try:
+        async for guild in guilds:
+            blacklistedTextChannel[int(guild["_id"])] = [int(channel) for channel in guild["blacklisted"]]
+            disabledCommandsDict[int(guild["_id"])] = [cmd for cmd in guild["disabled_commands"]]
+    except Exception as e:
+        print(e)
+    return blacklistedTextChannel, disabledCommandsDict
 
-blacklistedTextChannel = asyncio.get_event_loop().run_until_complete(make_blackList(serverSettingsCollection))
-print(blacklistedTextChannel)
+blacklistedTextChannel, disabledCommandsDict = asyncio.get_event_loop().run_until_complete(make_blackList(serverSettingsCollection))
 
 absDir = os.path.abspath(os.path.dirname(__file__))
 
