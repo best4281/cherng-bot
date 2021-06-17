@@ -173,6 +173,13 @@ class SteamInteractionCog(commands.Cog, name = "Steam", description = "Commands 
         await ctx.send(content, embed = embed)
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"{now}: {ctx.author.name} search for {keyword}, and it took {time.time() - start_time} seconds to finish.")
+    
+    @tag_steam.error
+    @steam_connect.error
+    async def steam_error(cog, ctx, error):
+        if isinstance(error, commands.errors.CheckFailure):
+            return
+        await ctx.send(f"{error}")
 
 def setup(bot):
     bot.add_cog(SteamInteractionCog(bot))

@@ -3,23 +3,33 @@ import discord
 from discord.ext import commands
 from configs import *
 
-async def confirm_clear(bot, ctx, msgCount:int, msgList:list):
+async def confirm_clear(bot, ctx, msgCount:int, msgList:list, check_func=None):
     confirm = await ctx.send(f":bangbang: {ctx.author.mention} You are about to delete {msgCount} messages in {ctx.channel.mention}.\nSend **yes** to confirm. Send **no** to cancel.", delete_after=30.0)
     del_check = lambda message: message.author == ctx.author and message.content.lower() in ["yes", "no"]
 
     try:
-        message = await bot.wait_for('message', timeout=20.0, check=del_check)
-        if message.content.lower() == "no":
+        user_confirm = await bot.wait_for('message', timeout=20.0, check=del_check)
+        if user_confirm.content.lower() == "no":
             await confirm.edit(content="Message deletion was aborted.")
-            await message.delete()
+            await user_confirm.delete()
             return
         await ctx.channel.delete_messages(msgList)
         await confirm.edit(content=f"**{msgCount}** messages were removed from {ctx.channel.mention}")
-        await message.delete()
+        await user_confirm.delete()
         return
     except asyncio.exceptions.TimeoutError:
         await confirm.edit(content="You did not gave me any confirmation in 20 seconds.")
         return
+    except discord.errors.ClientException:
+        def check(msg):
+            if check_func(msg) and msg in msgList:
+                return True
+            return False
+        deleted = await ctx.channel.purge(limit=10000, check=check)
+        await confirm.edit(content=f"**{len(deleted)-1}** messages were removed from {ctx.channel.mention}")
+        await user_confirm.delete()
+    except Exception as e:
+        print(e)
 
 class TextCog(commands.Cog, name = "Text", description = "Commands for managing text channel."):
 
@@ -40,20 +50,17 @@ class TextCog(commands.Cog, name = "Text", description = "Commands for managing 
             "**Require __manage message__ permission.**\n⠀"
         )
     )
+    @commands.has_guild_permissions(manage_messages=True)
     async def clear(self, ctx, num = None, *args):
 
-        if not ctx.author.permissions_in(ctx.channel).manage_messages:
-            await ctx.send(f"{ctx.author.mention} You does not have permission to manage messages in {ctx.channel.mention}.\nThis command cannot be used.")
-            return
-
         if not ctx.message.mentions and '-i' in args or '--ignore' in args:
-            check_func = lambda x: True
+            check_func = lambda msg: True
         elif ctx.message.mentions  and ctx.guild and '-i' in args or '--ignore' in args:
-            check_func = lambda x: x.author in ctx.message.mentions
+            check_func = lambda msg: msg.author in ctx.message.mentions
         elif ctx.message.mentions and ctx.guild:
-            check_func = lambda x: x.author in ctx.message.mentions and not x.pinned
+            check_func = lambda msg: msg.author in ctx.message.mentions and not msg.pinned
         else:
-            check_func = lambda x: not x.pinned
+            check_func = lambda msg: not msg.pinned
 
         if num == None:
             await ctx.invoke(self.bot.get_command('help'), "clear")
@@ -67,7 +74,7 @@ class TextCog(commands.Cog, name = "Text", description = "Commands for managing 
                     if check_func(msg):
                         msgCount += 1
                         msgList.append(msg)
-            await confirm_clear(self.bot, ctx, msgCount, msgList)
+            await confirm_clear(self.bot, ctx, msgCount, msgList, check_func)
 
         else:
             try:
@@ -87,10 +94,19 @@ class TextCog(commands.Cog, name = "Text", description = "Commands for managing 
                     if msgCount == num:
                         break
             if msgCount >= self.too_many_deletion:
-                await confirm_clear(self.bot, ctx, msgCount, msgList)
+                await confirm_clear(self.bot, ctx, msgCount, msgList, check_func)
             else:
                 await ctx.channel.delete_messages(msgList)
                 await ctx.send(f"**{msgCount}** messages were removed from {ctx.channel.mention}", delete_after=10.0)
+    
+    @clear.error
+    async def clear_error(cog, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(f"{ctx.author.mention} You does not have permission to manage messages in {ctx.channel.mention}.")
+            return
+        if isinstance(error, commands.errors.CheckFailure):
+            return
+        await ctx.send(f"{error}")
 
 def setup(bot):
     bot.add_cog(TextCog(bot))

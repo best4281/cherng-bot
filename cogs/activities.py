@@ -74,6 +74,15 @@ class SecretActivitiesCog(commands.Cog, command_attrs = { "hidden" : True}):
             return
         message = await ctx.send(f"https://discord.gg/{invite}")
         await message.pin()
+    
+    @poker.error
+    @fish.error
+    @youtube.error
+    @betrayal.error
+    async def activities_error(cog, ctx, error):
+        if isinstance(error, commands.errors.CheckFailure):
+            return
+        await ctx.send(f"{error}")
 
 def setup(bot):
     bot.add_cog(SecretActivitiesCog(bot))
