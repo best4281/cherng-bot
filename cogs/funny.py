@@ -189,6 +189,12 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         #print(bonk)
         await ctx.send(message, files=bonk)
         return
+    
+    @bonk.error
+    async def funny_error(cog, ctx, error):
+        if isinstance(error, commands.errors.CheckFailure):
+            return
+        await ctx.send(f"{error}")
 
 def setup(bot):
     bot.add_cog(FunnyCog(bot))
