@@ -7,6 +7,7 @@
 ### **Table of Contents**
 
 - [About](#About)
+- [The name](#The-name)
 - [Features](#features-version-001)
 - [Requirements](#Requirements)
   - [Required Python modules](#Required-Python-modules)
@@ -21,6 +22,10 @@
 ## About
 This bot was initially made as a midterm project for Programming Methodology I. What you are seeing in this repository is the extension of that project. However, I still keep improving its feature sets while I learn new aspect of Python and programming.
 <br/><br/>
+
+## The name
+The word **"Cherng"** in the name of this bot came from a transliteration of **เชิง** /t͡ɕʰɤːŋ/, a word in Thai language which means something close to "finesse" or "artifice" in English. Yes, I want this bot to be clever, cunning, and tact. Also, my friends use this word a lot in our conversation.
+(I guess it sounds very wrong, but for Thai people, please ignore it. Something was surely lost in translation.)
 
 ## Features *(version 0.0.1)*
 For elaborate feature list and future features, see the [Trello](https://trello.com/b/zkk36IIC/bot-features) page
