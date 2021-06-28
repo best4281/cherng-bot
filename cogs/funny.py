@@ -1,4 +1,5 @@
 import asyncio
+import typing
 import random
 import io
 import discord
@@ -127,19 +128,26 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
 
     def __init__(self,bot):
         self.bot = bot
+        self.max_bonk = 8
 
     @commands.command(
         name = "bonk",
         aliases = ["getbonk", "getbonked"],
         help = "Bonk the tagged person/people with random strength.",
-        usage = "<@user(s)>",
+        usage = "<@user(s)> [reason]",
         description = (
             "`@user(s):` mention user(s) to bonk more than one user (please don't bonk too many people at the same time)\n"
+            "`reason`: The reason why you bonk those people\n\n"
+            "`@everyone` and `@here` is not allowed for this command, in order to prevent abusive usage."
         )
     )
     @commands.guild_only()
-    async def bonk(self, ctx, *args, **kwargs):
-        
+    async def bonk(self, ctx, tagged:commands.Greedy[typing.Union[discord.Member, discord.Role]], *, reason=None, **kwargs):
+        if ctx.message.mention_everyone:
+            await ctx.send(f"Bonking `@everyone` and `@here` is not allowed, do not wake up everyone here with this stupid command.\nIf you want to tag everyone, please do it without using `{ctx.prefix}{ctx.invoked_with}`.", delete_after=10.0)
+            await asyncio.sleep(3.0)
+            await ctx.message.delete()
+            return
         if "strength" in kwargs:
             strength = kwargs["strength"]
         else:
@@ -148,7 +156,12 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         if "target" in kwargs:
             target = kwargs["target"]
         else:
-            target = set(ctx.message.mentions)
+            target = set()
+            for tag in tagged:
+                if isinstance(tag, discord.Role):
+                    target.update(tag.members)
+                else:
+                    target.add(tag)
             if not target:
                 await ctx.invoke(self.bot.get_command('help'), "bonk")
                 return
@@ -163,8 +176,8 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                 return
 
         if "message" not in kwargs:
-            if len(target) >= 10:
-                await ctx.send("Don't try to make **{len(target)}** enemies at the same time, my computational power cannot process that many bonk.")
+            if len(target) >= self.max_bonk:
+                await ctx.send(f"Don't try to make **{len(target)}** enemies at the same time, my computational power cannot process that many bonk.")
                 return
             elif len(target) > 1:
                 message = f"{ctx.author.mention} Trying to make **{len(target)}** enemies at the same time!? Daring today, aren't you?\nAnyway, here you go."
@@ -177,6 +190,9 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         else:
             message = kwargs["message"]
         
+        if reason:
+            message += f"\nBecause {reason}"
+
         async with ctx.typing():
             bonk = []
             for i,person in enumerate(target):
@@ -186,7 +202,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                     bonk.append(await create_bonk(ctx, None, ctx.author, strength))
                 else:
                     bonk.append(await create_bonk(ctx, ctx.author, person, strength))
-        #print(bonk)
+
         await ctx.send(message, files=bonk)
         return
 
