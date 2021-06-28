@@ -5,7 +5,7 @@ update_message = "New command: `bonk` was added to this bot. For more info, try 
 special_message = "Message from developer: *My midterm exam is also tomorrow, why am I doing this now...*\n*Please wish me luck*"
 
 def get_prefix_from_guild(guild):
-    with open(prefixFileName, 'r') as f:
+    with open(prefixFile, 'r') as f:
         prefixes = json.load(f)
     try:
         return prefixes[str(guild.id)]
