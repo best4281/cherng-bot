@@ -1,4 +1,5 @@
 import os
+import traceback
 import logging
 import discord
 from discord.ext import commands
@@ -71,7 +72,8 @@ async def on_command_error(ctx, error):
             invoked = ctx.invoked_with
         await ctx.send(f"`{ctx.prefix}{invoked}` cannot be used, because you are missing **{fmt}** permission(s).", delete_after=15.0)
         return
-    await ctx.send(error)
+    await ctx.send("Some error happened behind the scene. You know my developer is slacking of, so shits can happen from time to time.", delete_after=10.0)
+    traceback.print_exception(type(error), error, error.__traceback__)
     return
 
 if __name__ == "__main__":
