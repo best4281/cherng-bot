@@ -98,15 +98,7 @@ class TextCog(commands.Cog, name = "Text", description = "Commands for managing 
             else:
                 await ctx.channel.delete_messages(msgList)
                 await ctx.send(f"**{msgCount}** messages were removed from {ctx.channel.mention}", delete_after=10.0)
-    
-    @clear.error
-    async def clear_error(cog, ctx, error):
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.send(f"{ctx.author.mention} You does not have permission to manage messages in {ctx.channel.mention}.")
-            return
-        if isinstance(error, commands.errors.CheckFailure):
-            return
-        await ctx.send(f"{error}")
+
 
 def setup(bot):
     bot.add_cog(TextCog(bot))

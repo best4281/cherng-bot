@@ -51,12 +51,7 @@ class RandomCog(commands.Cog, command_attrs = {"hidden" : True}):
                     break
                 selected = selected + choice
         await ctx.send(selected)
-    
-    @toodpun.error
-    async def randompun_error(cog, ctx, error):
-        if isinstance(error, commands.errors.CheckFailure):
-            return
-        await ctx.send(f"{error}")
+
 
 def setup(bot):
     bot.add_cog(RandomCog(bot))

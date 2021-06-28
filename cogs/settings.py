@@ -182,15 +182,6 @@ class SettingsCog(
         else:
             await ctx.send("Umm, uhhhh... I'm dumb.")
 
-    @toggle.error
-    @blacklist.error
-    @prefix.error
-    @setting.error
-    async def setting_error(cog, ctx, error):
-        if isinstance(error, commands.errors.CheckFailure):
-            return
-        await ctx.send(f"{error}")
-
 
 def setup(bot):
     bot.add_cog(SettingsCog(bot))
