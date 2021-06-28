@@ -50,7 +50,8 @@ class RandomCog(commands.Cog, command_attrs = {"hidden" : True}):
                     selected = None
                     break
                 selected = selected + choice
-        await ctx.send(selected)
+        if selected:
+            await ctx.send(selected)
 
 
 def setup(bot):

@@ -10,23 +10,18 @@ from configs import *
 
 
 async def insert_profile(profile, base, pos:list):
-    alphaChannel = profile.getchannel('A')
     if type(base) is str:
         image = Image.open(base)
     else:
         image = base
-    try:
-        image.paste(profile, (int(image.size[0] - pos[0]), int(image.size[1] - pos[1])), mask=alphaChannel)
-    except Exception as e:
-        print(e)
+    image.alpha_composite(profile, (int(image.size[0] - pos[0]), int(image.size[1] - pos[1])))
     return image
 
 async def make_profile_round(userAvatar):
-    mask = Image.new('1', (320, 320), color = 0)
+    mask = Image.new('1', (320, 320), color = 255)
     drawMask = ImageDraw.Draw(mask)
-    drawMask.ellipse((0, 0, 320, 320), fill=255)
-    profileImg = userAvatar.copy()
-    profileImg.putalpha(mask)
+    drawMask.ellipse((0, 0, 320, 320), fill=0)
+    profileImg = Image.composite(Image.new("RGBA", (320, 320), (255, 0, 0, 0)), userAvatar.convert("RGBA"), mask=mask)
     return profileImg
 
 async def griddify(size, x_cut, y_cut):
@@ -142,7 +137,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         )
     )
     @commands.guild_only()
-    async def bonk(self, ctx, tagged:commands.Greedy[typing.Union[discord.Member, discord.Role]], *, reason=None, **kwargs):
+    async def bonk(self, ctx, tagged:commands.Greedy[typing.Union[discord.Member, discord.Role]]=None, *, reason=None, **kwargs):
         if ctx.message.mention_everyone:
             await ctx.send(f"Bonking `@everyone` and `@here` is not allowed, do not wake up everyone here with this stupid command.\nIf you want to tag everyone, please do it without using `{ctx.prefix}{ctx.invoked_with}`.", delete_after=10.0)
             await asyncio.sleep(3.0)
@@ -191,7 +186,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             message = kwargs["message"]
         
         if reason:
-            message += f"\nBecause {reason}"
+            message = f"Because {reason},\n{message}"
 
         async with ctx.typing():
             bonk = []
