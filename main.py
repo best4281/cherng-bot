@@ -36,6 +36,8 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    if message.author.bot:
+        return
     if not message.guild:
         await message.author.send("I was not made ready to serve you in private chat, maybe one day I will.")
         return
