@@ -17,8 +17,7 @@ class SettingsCog(
             for cmd in self.always_on_cmd.copy():
                 currentcmd = self.bot.get_command(cmd)
                 self.always_on_cmd.add(currentcmd.name)
-                for alias in currentcmd.aliases:
-                    self.always_on_cmd.add(alias)
+                self.always_on_cmd.update(currentcmd.aliases)
         except:
             pass
     
@@ -27,8 +26,7 @@ class SettingsCog(
         for cmd in self.always_on_cmd.copy():
             currentcmd = self.bot.get_command(cmd)
             self.always_on_cmd.add(currentcmd.name)
-            for alias in currentcmd.aliases:
-                self.always_on_cmd.add(alias)
+            self.always_on_cmd.update(currentcmd.aliases)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
