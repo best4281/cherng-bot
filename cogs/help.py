@@ -4,6 +4,7 @@ import datetime
 import discord
 from discord.ext import commands
 from configs import *
+from .utils import image as im
 
 class HelpCog(commands.Cog, name = "Help"):
 
@@ -61,7 +62,9 @@ class HelpCog(commands.Cog, name = "Help"):
                         color = botColor["Spring Bud"],
                         timestamp = datetime.datetime.utcnow()
                     )
-                embedHelp.set_thumbnail(url = self.bot.user.avatar_url)
+                botProfile = await im.get_round_profile(self.bot.user, diam=512)
+                botProfile = await im.make_discord_image(botProfile, "botprofile.png")
+                embedHelp.set_thumbnail(url = "attachment://botprofile.png")
                 
                 helpPages=[]
                 for currentPage in range(totalPages):
@@ -167,11 +170,12 @@ class HelpCog(commands.Cog, name = "Help"):
                 else:
                     content = f"There is no category or command with name **{detail}**."
                     embedHelp = None
+            botProfile = None
         
         if "page" not in locals() or totalPages == 1:
-            await ctx.send(content, embed = embedHelp)
+            await ctx.send(content, embed = embedHelp, file=botProfile)
         else:
-            helpMessage = await ctx.send(content, embed = embedHelp)
+            helpMessage = await ctx.send(content, embed = embedHelp, file=botProfile)
             if page == 1:
                 await helpMessage.add_reaction("\N{Cross Mark}")
                 await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
@@ -233,6 +237,8 @@ class HelpCog(commands.Cog, name = "Help"):
     async def help_error(cog, ctx, error):
         if isinstance(error, commands.MaxConcurrencyReached):
             await ctx.send("Only **two** interactive help command is allowed per channel at the same time. You can still use the old one.\nYou can also delete the existing one or wait until reactions on the existing one are removed *(20 seconds)*.")
+        else:
+            print(error)
 
 def setup(bot):
     bot.add_cog(HelpCog(bot))
