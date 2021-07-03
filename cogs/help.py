@@ -44,7 +44,7 @@ class HelpCog(commands.Cog, name = "Help"):
             async with ctx.typing():
                 if totalPages > 1:
                     embedHelp = discord.Embed(
-                        title = f"{self.bot.user.name} Commands listed by category:",
+                        title = f"Commands listed by category:",
                         description = (
                             f"Use `{prefix}help [category/command]` to get more detail\n"
                             f"Use `{prefix}help [page_number]` to go to specific page\n"
@@ -62,9 +62,7 @@ class HelpCog(commands.Cog, name = "Help"):
                         color = botColor["Spring Bud"],
                         timestamp = datetime.datetime.utcnow()
                     )
-                botProfile = await im.get_round_profile(self.bot.user, diam=512)
-                botProfile = await im.make_discord_image(botProfile, "botprofile.png")
-                embedHelp.set_thumbnail(url = "attachment://botprofile.png")
+                embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
                 
                 helpPages=[]
                 for currentPage in range(totalPages):
@@ -170,12 +168,11 @@ class HelpCog(commands.Cog, name = "Help"):
                 else:
                     content = f"There is no category or command with name **{detail}**."
                     embedHelp = None
-            botProfile = None
         
         if "page" not in locals() or totalPages == 1:
-            await ctx.send(content, embed = embedHelp, file=botProfile)
+            await ctx.send(content, embed = embedHelp)
         else:
-            helpMessage = await ctx.send(content, embed = embedHelp, file=botProfile)
+            helpMessage = await ctx.send(content, embed = embedHelp)
             if page == 1:
                 await helpMessage.add_reaction("\N{Cross Mark}")
                 await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
@@ -200,7 +197,7 @@ class HelpCog(commands.Cog, name = "Help"):
                         await helpMessage.edit(embed=helpPages[page-1])
                     elif reaction.emoji == "\N{Cross Mark}":
                         await helpMessage.delete()
-                        break
+                        return
                     else:
                         await helpMessage.remove_reaction(reaction.emoji, user)
                     
