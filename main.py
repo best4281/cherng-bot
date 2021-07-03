@@ -58,9 +58,10 @@ async def check_commands(ctx):
 
 @bot.event
 async def on_command_error(ctx, error):
-    if type(error) is commands.errors.CheckFailure:
+    errorType = type(error)
+    if errorType in [commands.errors.CheckFailure, commands.errors.CommandOnCooldown, commands.errors.MaxConcurrencyReached]:
         return
-    if type(error) is commands.errors.MissingPermissions:
+    if errorType is commands.errors.MissingPermissions:
         missing = [perm.replace('_', ' ').replace("guild", "server").title() for perm in error.missing_perms]
         if len(missing) > 2:
             fmt = ", ".join(missing[:-1])
@@ -75,7 +76,7 @@ async def on_command_error(ctx, error):
         await ctx.send(f"`{ctx.prefix}{invoked}` cannot be used, because you are missing **{fmt}** permission(s).", delete_after=15.0)
         return
     await ctx.send("Some error happened behind the scene. You know my developer is slacking of, so shits can happen from time to time.", delete_after=10.0)
-    traceback.print_exception(type(error), error, error.__traceback__)
+    traceback.print_exception(errorType, error, error.__traceback__)
     return
 
 if __name__ == "__main__":
