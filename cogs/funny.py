@@ -34,7 +34,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             client_secret=redditClientSecret,
             user_agent=redditClientID,
         )
-        self.max_submission = 100
+        self.max_submission = 300
         self.meme_list=[]
         self.fetch_meme.start()
 
@@ -156,7 +156,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             "`help:` show the help of this command, but why tho??"
         )
     )
-    @commands.cooldown(rate=2, per=30, type=commands.BucketType.user)
+    @commands.cooldown(rate=10, per=30, type=commands.BucketType.user)
     @commands.guild_only()
     async def reddit_meme(self, ctx, h=None):
         try:
@@ -249,7 +249,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
     @reddit_meme.error
     async def reddit_meme_error(cog, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(f"Scientist have found that requesting memes rapidly can case headache to you and your friends. You need to calm down and try again in **{error.retry_after:.1f}** seconds.")
+            await ctx.send(f"Scientist have found that requesting memes rapidly can cause headache to you and your friends. You need to calm down and try again in **{error.retry_after:.1f}** seconds.")
         else:
             print(error)
 
