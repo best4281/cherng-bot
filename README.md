@@ -14,6 +14,7 @@
     - [For Funny Cog](#For-Funny-Cog)
     - [For Steam Cog](#For-Steam-Cog)
 - [Setting up](#Setting-up)
+- [Invite my bot](#Invite-my-bot)
 - [Contact](#contact)
 - [License](#license)
 
@@ -27,22 +28,23 @@ This bot was initially made as a midterm project for Programming Methodology I. 
 The word **"Cherng"** in the name of this bot came from a transliteration of **เชิง** /t͡ɕʰɤːŋ/, a word in Thai language which means something close to "finesse" or "artifice" in English. Yes, I want this bot to be clever, cunning, and tact. Also, my friends use this word a lot in our conversation.
 (I guess it sounds very wrong, but for Thai people, please ignore it. Something was surely lost in translation.)
 
-## Features *(version 0.0.1)*
+## Features *(version 0.0.2)* ?
 For elaborate feature list and future features, see the [Trello](https://trello.com/b/zkk36IIC/bot-features) page
 - Custom prefix
 - Dynamic help function
 - Clear message command in text channel
 - [Invite friends with searched games](./cogs/steam.py) (Only works for Steam)
 - [Bonk](./cogs/funny.py) command
-- Quick reload cogs
+- [Reddit memes](./cogs/funny.py)
+- Quick reload cogs for owner
 - More to comes...  
 
 See [`README.md`](./cogs/) file in cogs folder for more elaborate version.
 <br/><br/>
 
 ## Requirements
-I wrote this bot using Python 3.9.5 on debian 10 system.
-The minimum required version of Python is 3.6 (determined using [Vermin](https://github.com/netromdk/vermin))
+I wrote this bot using Python 3.9.5 on Debian 10 system.
+The minimum required version of Python is 3.6
 I also use MongoDB Atlas as a database service of my choice.
 #### Required Python modules
 The version listed below represents the environment I am working with, I cannot guarantee the compatability for older version of these modules
@@ -55,6 +57,7 @@ The version listed below represents the environment I am working with, I cannot 
 ##### For Funny Cog
 - [numpy](https://numpy.org/) - 1.20.3
 - [Pillow](https://python-pillow.org/) - 8.2.0
+- [asyncpraw](https://asyncpraw.readthedocs.io/) - 7.3.0
 
 ##### For Steam Cog
 - [steam](https://github.com/ValvePython/steam) - 1.2.0 (Planned to replace due to blocking nature of the library)
@@ -66,10 +69,17 @@ You have to provide these secrets (credentials) to [`.env`](./.env) file.
 2. [Steam Web API key](https://steamcommunity.com/login/home/?goto=%2Fdev%2Fapikey)
 3. [Mongo cluster access key](https://docs.atlas.mongodb.com/connect-to-cluster/#connect-to-a-cluster)
 4. [Google API key](https://console.cloud.google.com/apis/credentials?_ga=2.234237150.1566059940.1622774822-1399153718.1622774822)
+5. [reddit related credentials](https://www.reddit.com/prefs/apps/), see more in [`.env`](./.env) file.
+
+Then, just run [`main.py`](./main.py).
+Also, don't forget to invite your own bot into your own Discord server to use it.
 <br/><br/>
+
+## Invite my bot
+If you don't want to fiddle with all of my messy codes for some setting that might not even exist, my bot is currently running 24/7 on Google Cloud Platform, you can invite it to your server using [this link](https://discord.com/api/oauth2/authorize?client_id=729564576559005707&permissions=8&scope=bot).
 
 ## Contact
 Discord: [best4281](https://discordapp.com/users/283765324401344514) (Please DM me first, I don't want to add people randomly)
 
 ## LICENSE
-I don't know how this thing work, please help.
+I still don't know how this thing work, please help.
