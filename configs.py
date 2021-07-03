@@ -17,6 +17,9 @@ discordToken = os.getenv("DISCORD_TOKEN")
 steamToken = os.getenv("STEAM_WEB_API_KEY")
 mongoConnectionURL = os.getenv("MONGO_CLUSTER")
 googleToken = os.getenv("GOOGLE_API_KEY")
+redditClientID = os.getenv("REDDIT_CLIENT_ID")
+redditClientSecret = os.getenv("REDDIT_CLIENT_SECRET")
+redditScriptName = os.getenv("REDDIT_SCRIPT_NAME")
 
 botColor = {
     "Spring Bud": 0xAFFF00,
