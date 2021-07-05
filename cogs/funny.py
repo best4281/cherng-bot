@@ -90,11 +90,14 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             await asyncio.sleep(3.0)
             await ctx.message.delete()
             return
+        if not tagged:
+            await ctx.invoke(self.bot.get_command('help'), "bonk")
+            return
         if "strength" in kwargs:
             strength = kwargs["strength"]
         else:
             strength = random.random()
-        
+
         if "target" in kwargs:
             target = kwargs["target"]
         else:
