@@ -15,8 +15,7 @@ async def fetch_invite(ctx, app):
     try:
         voice =  str(ctx.author.voice.channel.id)
     except Exception as e:
-        await ctx.send("You are not in a valid voice channel.")
-        print(e)
+        await ctx.send("You are not in a valid voice channel. Please join a voice channel before activating any activity command.")
         return False
 
     body = json.dumps({"max_age":0, "target_type": 2, "target_application_id": discordAppID[app]})
