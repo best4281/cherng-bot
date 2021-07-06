@@ -59,7 +59,7 @@ async def check_commands(ctx):
 @bot.event
 async def on_command_error(ctx, error):
     errorType = type(error)
-    if errorType in [commands.errors.CheckFailure, commands.errors.CommandOnCooldown, commands.errors.MaxConcurrencyReached]:
+    if errorType in [commands.errors.CheckFailure, commands.errors.CommandOnCooldown, commands.errors.MaxConcurrencyReached, commands.errors.CommandNotFound]:
         return
     if errorType is commands.errors.MissingPermissions:
         missing = [perm.replace('_', ' ').replace("guild", "server").title() for perm in error.missing_perms]
