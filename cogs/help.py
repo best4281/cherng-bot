@@ -62,7 +62,7 @@ class HelpCog(commands.Cog, name = "Help"):
                         color = botColor["Spring Bud"],
                         timestamp = datetime.datetime.utcnow()
                     )
-                embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
+                embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar)
                 
                 helpPages=[]
                 for currentPage in range(totalPages):
@@ -125,7 +125,7 @@ class HelpCog(commands.Cog, name = "Help"):
                     if not parentCommands:
                         parentCommands = "Command"
                     embedHelp = discord.Embed(title = f"{parentCommands}: {command.name}", description = f"{command.help}\n⠀", color = botColor["Lime Green"])
-                    embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
+                    embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar)
                     embedHelp.set_footer(text = "/ - Or , <> - Required & [] - Optional")
                     usage = command.usage if command.usage is not None else ''
                     alias = ', '.join(command.aliases)
@@ -152,7 +152,7 @@ class HelpCog(commands.Cog, name = "Help"):
                     index = checkCogs.index(detaillow)
                     currentCog = self.bot.get_cog(cogs[index])
                     embedHelp = discord.Embed(title = f"Category: {cogs[index]}", description = currentCog.description + "\n⠀" , color = botColor["Yellow Green"])
-                    embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
+                    embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar)
                     embedHelp.set_footer(text = "/ - Or , <> - Required & [] - Optional")
                     for command in currentCog.walk_commands():
                         if command.hidden:

@@ -78,7 +78,7 @@ async def warp_profile(profile, strength):
     return profile, x_step, y_step
 
 async def get_round_profile(user, diam=320):
-    avatarAsset = user.avatar_url_as(format='png', size=1024)
+    avatarAsset = user.avatar
     avatarBuffer = io.BytesIO()
     await avatarAsset.save(avatarBuffer)
     avatarBuffer.seek(0)
