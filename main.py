@@ -1,3 +1,4 @@
+import datetime
 import os
 import traceback
 import logging
@@ -48,12 +49,16 @@ async def on_message(message):
 
 @bot.check_once
 async def check_commands(ctx):
-    if ctx.channel.id in blacklistedTextChannel[ctx.guild.id] and f"{ctx.prefix}{ctx.invoked_with} blacklist" not in ctx.message.content:
-        await ctx.send(f"This channel was blacklisted, you can remove this text channel from blacklist using **{ctx.prefix}setting blacklist {ctx.channel.mention}**", delete_after=15.0)
-        return False
-    elif ctx.command.name in disabledCommandsDict[ctx.guild.id]:
-        await ctx.send(f"`{ctx.prefix}{ctx.invoked_with}` is currently disabled in this server, you can enable it using **{ctx.prefix}setting toggle {ctx.invoked_with}**", delete_after=15.0)
-        return False
+    try:
+        if ctx.channel.id in blacklistedTextChannel[ctx.guild.id] and f"{ctx.prefix}{ctx.invoked_with} blacklist" not in ctx.message.content:
+            await ctx.send(f"This channel was blacklisted, you can remove this text channel from blacklist using **{ctx.prefix}setting blacklist {ctx.channel.mention}**", delete_after=15.0)
+            return False
+        elif ctx.command.name in disabledCommandsDict[ctx.guild.id]:
+            await ctx.send(f"`{ctx.prefix}{ctx.invoked_with}` is currently disabled in this server, you can enable it using **{ctx.prefix}setting toggle {ctx.invoked_with}**", delete_after=15.0)
+            return False
+    except Exception as e:
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now}: {e}, you dumb developer.")
     return True
 
 @bot.event
