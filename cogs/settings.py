@@ -2,6 +2,7 @@ import discord
 import json
 from datetime import datetime
 from discord.ext import commands
+from discord.ext.commands.errors import GuildNotFound
 from configs import *
 
 
@@ -39,6 +40,8 @@ class SettingsCog(
                 "blacklisted": []
             }
         )
+        blacklistedTextChannel[guild.id] = []
+        disabledCommandsDict[guild.id] = []
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if setup.acknowledged:
             print(f"{now}: {guild.name} database was initiated.")
@@ -62,6 +65,8 @@ class SettingsCog(
         prefixes.pop(str(guild.id))
         json.dump(prefixes, open(prefixFile, "w"), indent=4)
         deleted = await serverSettingsCollection.delete_one({"_id": guild.id})
+        del blacklistedTextChannel[guild.id]
+        del disabledCommandsDict[guild.id]
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if deleted.acknowledged:
             print(f"{now}: {guild.name} database was deleted.")
