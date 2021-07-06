@@ -1,4 +1,5 @@
 import asyncio.exceptions
+import datetime
 import discord
 from discord.ext import commands
 from configs import *
@@ -29,7 +30,8 @@ async def confirm_clear(bot, ctx, msgCount:int, msgList:list, check_func=None):
         await confirm.edit(content=f"**{len(deleted)-1}** messages were removed from {ctx.channel.mention}")
         await user_confirm.delete()
     except Exception as e:
-        print(e)
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now}: cogs.text.confirm_clear() {e}")
 
 class TextCog(commands.Cog, name = "Text", description = "Commands for managing text channel."):
 
