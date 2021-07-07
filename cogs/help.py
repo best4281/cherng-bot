@@ -1,6 +1,6 @@
 import asyncio
 import math
-import datetime
+from datetime import datetime
 import discord
 from discord.ext import commands
 from configs import *
@@ -53,14 +53,14 @@ class HelpCog(commands.Cog, name = "Help"):
                             "Press :x: below to delete this help message\n⠀"
                         ),
                         color = botColor["Spring Bud"],
-                        timestamp = datetime.datetime.utcnow()
+                        timestamp = datetime.utcnow()
                     )
                 else:
                     embedHelp = discord.Embed(
                         title = f"{self.bot.user.name} Commands listed by category:",
                         description = f"Use `{prefix}help [category/command]` for more detail\n⠀",
                         color = botColor["Spring Bud"],
-                        timestamp = datetime.datetime.utcnow()
+                        timestamp = datetime.utcnow()
                     )
                 embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar)
                 
