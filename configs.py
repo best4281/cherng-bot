@@ -2,7 +2,6 @@ import asyncio
 import os
 import json
 import motor.motor_asyncio as motor
-from dotenv import load_dotenv
 
 
 def get_prefix(ctx):
@@ -12,14 +11,13 @@ def get_prefix(ctx):
         return defaultPrefix
 
 
-load_dotenv()
-discordToken = os.getenv("DISCORD_TOKEN")
-steamToken = os.getenv("STEAM_WEB_API_KEY")
-mongoConnectionURL = os.getenv("MONGO_CLUSTER")
-googleToken = os.getenv("GOOGLE_API_KEY")
-redditClientID = os.getenv("REDDIT_CLIENT_ID")
-redditClientSecret = os.getenv("REDDIT_CLIENT_SECRET")
-redditScriptName = os.getenv("REDDIT_SCRIPT_NAME")
+discordToken = os.environ["DISCORD_TOKEN"]
+steamToken = os.environ["STEAM_WEB_API_KEY"]
+mongoConnectionURL = os.environ["MONGO_CLUSTER"]
+googleToken = os.environ["GOOGLE_API_KEY"]
+redditClientID = os.environ["REDDIT_CLIENT_ID"]
+redditClientSecret = os.environ["REDDIT_CLIENT_SECRET"]
+redditScriptName = os.environ["REDDIT_SCRIPT_NAME"]
 
 botColor = {
     "Spring Bud": 0xAFFF00,
