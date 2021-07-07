@@ -1,5 +1,5 @@
 import asyncio
-import datetime
+from datetime import datetime
 import os
 import json
 import motor.motor_asyncio as motor
