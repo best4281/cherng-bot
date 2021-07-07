@@ -1,5 +1,5 @@
 import asyncio.exceptions
-import datetime
+from datetime import datetime
 import discord
 from discord.ext import commands
 from configs import *
