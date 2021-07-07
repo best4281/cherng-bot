@@ -245,7 +245,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             await ctx.send("There is no post that I can properly display right now, my maker will make it display later when he want to.")'''
         
     @fetch_meme.error
-    async def fetch_meme_error(*, error):
+    async def fetch_meme_error(cog, error):
         print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
         print(f"Some error happened while fetching memes.")
     
