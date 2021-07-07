@@ -247,7 +247,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
     @fetch_meme.error
     async def fetch_meme_error(cog, error):
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
-        print(f"Some error happened while fetching memes.")
+        print(f"Some error happened while fetching memes. {error}")
     
     @reddit_meme.error
     async def reddit_meme_error(cog, ctx, error):
