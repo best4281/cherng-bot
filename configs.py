@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 import os
-import json
 import motor.motor_asyncio as motor
 
 
@@ -28,8 +27,6 @@ botColor = {
     "Orange": 0xF08700,
 }
 
-prefixFile = "./prefixes.json"
-prefixes = json.load(open(prefixFile, "r"))
 cogsDir = "cogs"
 defaultPrefix = "!"
 CSEid = "49fac5d937f302021"
@@ -38,19 +35,22 @@ cluster = motor.AsyncIOMotorClient(mongoConnectionURL)
 serverSettingsCollection = cluster["server"]["settings"]
 
 async def make_blackList(col):
-    guilds= col.find(projection={"_id": True, "blacklisted": True, "disabled_commands": True})
+    guilds = col.find(projection={"_id": True, "blacklisted": True, "disabled_commands": True, "prefix": True})
     blacklistedTextChannel = {}
     disabledCommandsDict = {}
+    prefixes = {}
     try:
         async for guild in guilds:
-            blacklistedTextChannel[int(guild["_id"])] = [int(channel) for channel in guild["blacklisted"]]
-            disabledCommandsDict[int(guild["_id"])] = [cmd for cmd in guild["disabled_commands"]]
+            guild_id = int(guild["_id"])
+            blacklistedTextChannel[guild_id] = [int(channel) for channel in guild["blacklisted"]]
+            disabledCommandsDict[guild_id] = [cmd for cmd in guild["disabled_commands"]]
+            prefixes[guild_id] = guild["prefix"]
     except Exception as e:
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"{now}: configs.make_blacklist() {e}")
-    return blacklistedTextChannel, disabledCommandsDict
+    return blacklistedTextChannel, disabledCommandsDict, prefixes
 
-blacklistedTextChannel, disabledCommandsDict = asyncio.get_event_loop().run_until_complete(make_blackList(serverSettingsCollection))
+blacklistedTextChannel, disabledCommandsDict, prefixes = asyncio.get_event_loop().run_until_complete(make_blackList(serverSettingsCollection))
 
 absDir = os.path.abspath(os.path.dirname(__file__))
 

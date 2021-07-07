@@ -5,8 +5,6 @@ update_message = "New command: `meme` is now available in this build of this bot
 special_message = ""
 
 def get_prefix_from_guild(guild):
-    with open(prefixFile, 'r') as f:
-        prefixes = json.load(f)
     try:
         return prefixes[str(guild.id)]
     except:

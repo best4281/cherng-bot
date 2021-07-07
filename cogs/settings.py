@@ -1,5 +1,4 @@
 import discord
-import json
 from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands.errors import GuildNotFound
@@ -32,12 +31,12 @@ class SettingsCog(
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         prefixes[str(guild.id)] = defaultPrefix
-        json.dump(prefixes, open(prefixFile, "w"), indent=4)
         setup = await serverSettingsCollection.insert_one({
                 "_id": guild.id,
                 "name": guild.name,
                 "disabled_commands": [],
-                "blacklisted": []
+                "blacklisted": [],
+                "prefix": defaultPrefix
             }
         )
         blacklistedTextChannel[guild.id] = []
@@ -63,7 +62,6 @@ class SettingsCog(
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         prefixes.pop(str(guild.id))
-        json.dump(prefixes, open(prefixFile, "w"), indent=4)
         deleted = await serverSettingsCollection.delete_one({"_id": guild.id})
         del blacklistedTextChannel[guild.id]
         del disabledCommandsDict[guild.id]
@@ -110,8 +108,11 @@ class SettingsCog(
         else:
             async with ctx.typing():
                 prefixes[str(ctx.guild.id)] = newPrefix
-                json.dump(prefixes, open(prefixFile, "w"), indent=4)
-            await ctx.send(f"Prefix for {self.bot.user.mention} in this server was changed to `{newPrefix}`")
+                savedPrefix = await serverSettingsCollection.update_one({"_id": ctx.guild.id}, {"$set":{"prefix": newPrefix}})
+                if savedPrefix.matched_count != 0:
+                    await ctx.send(f"Prefix for {self.bot.user.mention} in this server was changed to `{newPrefix}`")
+                else:
+                    await ctx.send("Umm, uhhhh... I'm dumb.")
 
     @setting.command(
         name="toggle",
