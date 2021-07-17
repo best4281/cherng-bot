@@ -1,5 +1,5 @@
 import asyncio
-import datetime
+from datetime import datetime
 import typing
 import random
 import asyncpraw
@@ -52,7 +52,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                 memeEmbed = discord.Embed(
                     title=f"**{submission.title}**",
                     url=f"https://www.reddit.com{submission.permalink}",
-                    timestamp = datetime.datetime.utcfromtimestamp(submission.created_utc),
+                    timestamp = datetime.utcfromtimestamp(submission.created_utc),
                 )
                 memeEmbed.set_author(name=f"r/{submission.subreddit.display_name}", url=f"https://www.reddit.com/r/{submission.subreddit.display_name}")
                 memeEmbed.set_footer(text=f"{submission.score}  |  💬   {submission.num_comments}", icon_url="attachment://upvote.png")
@@ -69,7 +69,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                 "spoiler": submission.spoiler
             }
             self.meme_list.append(meme)
-        print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
         print(f"Meme list updated.")
 
     @commands.command(
@@ -208,9 +208,9 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
         max_sub = 100
         memeEmbed = None
         async with ctx.typing():
-            start = datetime.datetime.now()
+            start = datetime.now()
             submissions = [submission async for submission in subreddit.hot(limit=max_sub) if not submission.stickied]
-            print(f"Took: {datetime.datetime.now() - start} seconds to make list")
+            print(f"Took: {datetime.now() - start} seconds to make list")
             cnt=0
             while submissions:
                 print(f"{cnt=}")
@@ -228,12 +228,12 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
                 memeEmbed = discord.Embed(
                     title=f"**{submission.title}**",
                     url=f"https://www.reddit.com{submission.permalink}",
-                    timestamp = datetime.datetime.utcfromtimestamp(submission.created_utc)
+                    timestamp = datetime.utcfromtimestamp(submission.created_utc)
                 )
-                start = datetime.datetime.now()
+                start = datetime.now()
                 author = submission.author
                 await author.load()
-                print(f"Took: {datetime.datetime.now() - start} seconds to load author")
+                print(f"Took: {datetime.now() - start} seconds to load author")
                 print(f"{submission.url=}")
                 memeEmbed.set_author(name=author.name, url=f"https://www.reddit.com/user/{author.name}", icon_url=author.icon_img)
                 memeEmbed.set_image(url=submission.url)
@@ -245,9 +245,9 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
             await ctx.send("There is no post that I can properly display right now, my maker will make it display later when he want to.")'''
         
     @fetch_meme.error
-    async def fetch_meme_error(*, error):
-        print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
-        print(f"Some error happened while fetching memes.")
+    async def fetch_meme_error(cog, error):
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), end=': ')
+        print(f"Some error happened while fetching memes. {error}")
     
     @reddit_meme.error
     async def reddit_meme_error(cog, ctx, error):

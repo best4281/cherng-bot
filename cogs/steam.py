@@ -88,7 +88,6 @@ class SteamInteractionCog(commands.Cog, name = "Steam", description = "Commands 
             try:
                 steamID = steamid.from_url(steamURL).as_64
             except Exception as e:
-                print(e)
                 await ctx.send(f"{ctx.author.mention} Your steam ID is irretrievable; the link may be invalid or Steam Web API might be down.")
                 return
             if steamID == None:

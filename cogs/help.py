@@ -1,6 +1,6 @@
 import asyncio
 import math
-import datetime
+from datetime import datetime
 import discord
 from discord.ext import commands
 from configs import *
@@ -53,14 +53,14 @@ class HelpCog(commands.Cog, name = "Help"):
                             "Press :x: below to delete this help message\n⠀"
                         ),
                         color = botColor["Spring Bud"],
-                        timestamp = datetime.datetime.utcnow()
+                        timestamp = datetime.utcnow()
                     )
                 else:
                     embedHelp = discord.Embed(
                         title = f"{self.bot.user.name} Commands listed by category:",
                         description = f"Use `{prefix}help [category/command]` for more detail\n⠀",
                         color = botColor["Spring Bud"],
-                        timestamp = datetime.datetime.utcnow()
+                        timestamp = datetime.utcnow()
                     )
                 embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar_url)
                 
@@ -207,25 +207,23 @@ class HelpCog(commands.Cog, name = "Help"):
                     elif page == totalPages:
                         await helpMessage.clear_reaction("\N{Black Right-Pointing Triangle}")
                         await helpMessage.add_reaction("\N{Black Left-Pointing Triangle}")
+                    elif reaction.emoji == "\N{Black Right-Pointing Triangle}" and page == 2:
+                        await helpMessage.clear_reaction("\N{Black Right-Pointing Triangle}")
+                        await helpMessage.add_reaction("\N{Black Left-Pointing Triangle}")
+                        await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
                     else:
-                        if reaction.emoji == "\N{Black Right-Pointing Triangle}" and page == 2:
-                            try:
-                                await helpMessage.clear_reaction("\N{Black Right-Pointing Triangle}")
-                                await helpMessage.add_reaction("\N{Black Left-Pointing Triangle}")
-                                await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
-                            except Exception as e:
-                                print(e)
-                        else:
-                            await helpMessage.remove_reaction(reaction.emoji, user)
-                            await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
+                        await helpMessage.remove_reaction(reaction.emoji, user)
+                        await helpMessage.add_reaction("\N{Black Right-Pointing Triangle}")
                 except asyncio.exceptions.TimeoutError:
                     try:
                         await helpMessage.clear_reactions()
                     except Exception as e:
-                        print(e)
+                        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        print(f"{now}: cogs.help:line 223 {e}")
                     break
                 except Exception as e:
-                    print(e)
+                    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    print(f"{now}: cogs.help - error in paged help: {e}")
             timeoutEmbed = helpMessage.embeds[0]
             timeoutEmbed.description = f"Use `{prefix}help [category/command]` to get more detail\nUse `{prefix}help [page_number]` to go to specific page\n⠀"
             await helpMessage.edit(embed=timeoutEmbed)

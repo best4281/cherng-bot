@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 import os
 import json
 import motor.motor_asyncio as motor
@@ -47,7 +48,8 @@ async def make_blackList(col):
             blacklistedTextChannel[int(guild["_id"])] = [int(channel) for channel in guild["blacklisted"]]
             disabledCommandsDict[int(guild["_id"])] = [cmd for cmd in guild["disabled_commands"]]
     except Exception as e:
-        print(e)
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now}: configs.make_blacklist() {e}")
     return blacklistedTextChannel, disabledCommandsDict
 
 blacklistedTextChannel, disabledCommandsDict = asyncio.get_event_loop().run_until_complete(make_blackList(serverSettingsCollection))
