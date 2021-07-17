@@ -40,7 +40,7 @@ class FunnyCog(commands.Cog, name = "Funny", description = "Commands just for fu
 
     @tasks.loop(minutes=10.0)
     async def fetch_meme(self):
-        subreddit_meme = await self.reddit.subreddit("memes+dankmemes+wholesomememes")
+        subreddit_meme = await self.reddit.subreddit("memes+dankmemes+shitposting")
         async for submission in subreddit_meme.hot(limit=self.max_submission):
             if submission.stickied:
                 continue
