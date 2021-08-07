@@ -7,7 +7,7 @@ from configs import *
 class TicTacToeButton(discord.ui.Button):
 
     def __init__(self, x: int, y: int):
-        super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
+        super().__init__(style=discord.ButtonStyle.secondary, label='⠀', row=y)
         self.x = x
         self.y = y
     
