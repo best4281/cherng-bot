@@ -88,7 +88,7 @@ class NewHelpCog(commands.Cog):
                         f"Use `{prefix}help [page_number]` to go to specific page\n"
                     ),
                     color = botColor["Spring Bud"],
-                    timestamp = datetime.datetime.utcnow()
+                    timestamp = datetime.utcnow()
                 )
                 embedHelp.set_author(name = self.bot.user.name, icon_url = self.bot.user.avatar)
                 
