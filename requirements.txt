@@ -1,5 +1,5 @@
 asyncpraw==7.3.0
-discord.py>=1.7.2, <2.0
+discord.py==2.0.0a3470+gfeae059c
 dnspython==2.1.0
 google-api-python-client==2.6.0
 motor==2.4.0
