@@ -1,5 +1,6 @@
-asyncpraw==7.3.0
-discord.py==2.0.0a3470+gfeae059c
+asyncpraw==7.4.0
+discord-py-slash-command==3.0.1
+git+git://github.com/Rapptz/discord.py@feae059c6858e419552ec4096f1ad2692bb4c484#egg=discord.py
 dnspython==2.1.0
 google-api-python-client==2.6.0
 motor==2.4.0
