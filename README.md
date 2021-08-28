@@ -3,7 +3,18 @@
   <img src="https://cdn.discordapp.com/avatars/729564576559005707/b17810e2e0fd18c6a7c604bfe7e51b3d.png?size=128" />
 </p>
 
+
+## **Important notice**
+
+This repository and the support this Python version of CherngBot will be terminated due to a development cessation of [discord.py](https://github.com/Rapptz/discord.py) library this version of Cherngbot rely on.
+
+Further explanation can be found in [here](https://gist.github.com/best4281/be40aa304dd7aa916b76e18faf4bbd5c).  
+Thank you for your understanding.
+
+The rewrite (JavaScript) version of this CherngBot is not intended to be open-source until further decisions are made in the process of development.
+
 ------------
+
 ### **Table of Contents**
 
 - [About](#About)
